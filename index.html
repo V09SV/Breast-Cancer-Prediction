@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breast Cancer Prediction</title>
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+    body.dark-mode {
+        background: #181a1b !important;
+        color: #f1f1f1 !important;
+    }
+    body.dark-mode .card, body.dark-mode .feature, body.dark-mode .feature-item, body.dark-mode .form-control, body.dark-mode .form-select {
+        background: #23272b !important;
+        color: #f1f1f1 !important;
+        border-color: #444 !important;
+    }
+    body.dark-mode .btn-primary {
+        background: #375a7f !important;
+        border-color: #375a7f !important;
+    }
+    body.dark-mode .btn-outline-secondary {
+        color: #f1f1f1 !important;
+        border-color: #aaa !important;
+    }
+    </style>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <!-- Fixed Dark Mode Toggle -->
+    <!-- Minimal inline dark mode toggle -->
+    <section class="hero-section-pink d-flex align-items-center justify-content-center w-100" style="min-height: 320px; position:relative; overflow:hidden;">
+      <!-- Wavy pink SVG background -->
+      <svg class="hero-bg-svg position-absolute top-0 start-0 w-100 h-100" viewBox="0 0 1440 380" fill="none" xmlns="http://www.w3.org/2000/svg" style="z-index:0;">
+        <rect width="1440" height="380" fill="#FFD1DC"/>
+        <path d="M0 320C144 280 288 340 432 320C576 300 720 200 864 220C1008 240 1152 340 1296 320C1440 300 1440 380 1440 380H0V320Z" fill="#FFB6C1"/>
+        <path d="M0 260C144 220 288 300 432 280C576 260 720 160 864 180C1008 200 1152 300 1296 280C1440 260 1440 380 1440 380H0V260Z" fill="#FFE4EC"/>
+      </svg>
+      <div class="container position-relative d-flex flex-column flex-md-row align-items-center justify-content-center py-5" style="z-index:1;">
+        <!-- SVG Ribbon with flowers (public domain style) -->
+        <div class="ribbon-flowers me-md-4 mb-3 mb-md-0 d-flex align-items-center justify-content-center" style="max-width: 220px;">
+          <img src="{{ url_for('static', filename='images/download.png') }}" alt="Breast Cancer Logo" class="img-fluid" style="max-width:180px; max-height:160px; border-radius:18px; box-shadow:0 4px 18px #e7548050; background:#ffe4ec; padding:8px;">
+        </div>
+        <div class="text-center text-md-start">
+          <h1 class="hero-pink-title mb-2" style="font-size:2.7rem; font-weight:700; color:#e75480; letter-spacing:2px; text-transform:uppercase; font-family:'Poppins',sans-serif;">Breast<br class="d-md-none">Cancer<br class="d-md-none">Prediction</h1>
+        </div>
+      </div>
+    </section>
+    <div class="container py-4">
+        <!-- Friendly Welcome Message -->
+        <div class="row justify-content-center mb-3">
+            <div class="col-lg-10 text-center">
+                <div style="background:linear-gradient(90deg,#ffe4ec,#ffd1dc);border-radius:18px;padding:12px 0 10px 0;box-shadow:0 2px 12px #ffd1dc40;margin-bottom:8px;">
+                    <span style="color:#e75480;font-size:1.25rem;font-weight:500;letter-spacing:1px;">Welcome! Get instant breast cancer risk predictions below.</span>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center mb-4">
+            <div class="col-lg-8 text-center">
+                <h2 class="display-5 fw-bold mb-2" style="color:#e75480;">Breast Cancer Prediction Form</h2>
+                <p class="lead text-muted mb-4">Enter patient details and tumor features to predict the diagnosis.</p>
+            </div>
+        </div>
+        <form action="/predict" method="POST" class="needs-validation" novalidate>
+        <div class="row g-4 mb-4 align-items-center">
+            <div class="col-lg-6">
+                <div class="card shadow-sm p-4 d-flex flex-column justify-content-center align-items-start" style="background:#fff0f6; border: 2px solid #ffd1dc; min-height:220px;">
+                    <div class="mb-3 w-100">
+                        <label for="name" class="form-label fw-semibold" style="color:#e75480;">Patient Name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Patient Name" required>
+                    </div>
+                    <div class="mb-3 w-100">
+                        <label for="age" class="form-label fw-semibold" style="color:#e75480;">Age</label>
+                        <input type="number" class="form-control" id="age" name="age" placeholder="Patient Age" required>
+                    </div>
+                    <div class="mb-3 w-100">
+                        <label for="gender" class="form-label fw-semibold" style="color:#e75480;">Gender</label>
+                        <select class="form-select" id="gender" name="gender" required>
+                            <option value="" disabled selected>Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="card shadow-sm p-4 d-flex flex-column align-items-center justify-content-center" style="height:100%; min-height:220px; background:#fff0f6; border: 2px solid #ffd1dc;">
+                    <img src="{{ url_for('static', filename='images/care.gif') }}" alt="Care" style="width:220px; height:220px; object-fit:contain; border-radius:24px; box-shadow:0 4px 24px #e7548050; background:#ffe4ec; padding:16px; margin-bottom:16px;">
+                    <span style="color:#e75480; font-weight:600; font-size:1.25rem;">Care</span>
+                </div>
+            </div>
+        </div>
+        <div class="card shadow-sm mb-4 p-4" style="background:#fff0f6;">
+            <h3 class="mb-3 text-center fw-bold" style="color:#e75480;">Enter Tumor Features</h3>
+            <div class="progress mb-4" style="height: 10px; background:#ffd1dc;">
+                <div id="featureProgress" class="progress-bar" role="progressbar" style="width: 0%; background: linear-gradient(90deg,#e75480,#ffb6c1);" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+                <!-- Group features into collapsible accordions -->
+                <div class="accordion" id="featureAccordion">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingMean">
+                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMean" aria-expanded="true" aria-controls="collapseMean" style="background: linear-gradient(90deg,#e75480,#ffb6c1);">
+                        Mean Features
+                      </button>
+                    </h2>
+                    <div id="collapseMean" class="accordion-collapse collapse show" aria-labelledby="headingMean" data-bs-parent="#featureAccordion">
+                      <div class="accordion-body">
+                        <div class="row g-3">
+                          {% for i in range(0, 10) %}
+                          <div class="col-md-6">
+                            <label for="feature{{ i }}" class="form-label d-flex align-items-center">{{ column_names[i] }}
+                              <i class="bi bi-info-circle ms-1 text-info" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="top" title="Enter the value for {{ column_names[i] }} (Mean)"></i>
+                            </label>
+                            <input type="number" step="any" class="form-control feature-input" id="feature{{ i }}" name="feature{{ i }}" required aria-label="{{ column_names[i] }}">
+                            <div class="invalid-feedback">Required</div>
+                          </div>
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingSE">
+                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSE" aria-expanded="false" aria-controls="collapseSE" style="background: linear-gradient(90deg,#ffb6c1,#ff7bac);">
+                        SE (Standard Error) Features
+                      </button>
+                    </h2>
+                    <div id="collapseSE" class="accordion-collapse collapse" aria-labelledby="headingSE" data-bs-parent="#featureAccordion">
+                      <div class="accordion-body">
+                        <div class="row g-3">
+                          {% for i in range(10, 20) %}
+                          <div class="col-md-6">
+                            <label for="feature{{ i }}" class="form-label d-flex align-items-center">{{ column_names[i] }}
+                              <i class="bi bi-info-circle ms-1 text-info" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="top" title="Enter the value for {{ column_names[i] }} (SE)"></i>
+                            </label>
+                            <input type="number" step="any" class="form-control feature-input" id="feature{{ i }}" name="feature{{ i }}" required aria-label="{{ column_names[i] }}">
+                            <div class="invalid-feedback">Required</div>
+                          </div>
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingWorst">
+                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWorst" aria-expanded="false" aria-controls="collapseWorst" style="background: linear-gradient(90deg,#ff7bac,#e75480);">
+                        Worst Features
+                      </button>
+                    </h2>
+                    <div id="collapseWorst" class="accordion-collapse collapse" aria-labelledby="headingWorst" data-bs-parent="#featureAccordion">
+                      <div class="accordion-body">
+                        <div class="row g-3">
+                          {% for i in range(20, 30) %}
+                          <div class="col-md-6">
+                            <label for="feature{{ i }}" class="form-label d-flex align-items-center">{{ column_names[i] }}
+                              <i class="bi bi-info-circle ms-1 text-info" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="top" title="Enter the value for {{ column_names[i] }} (Worst)"></i>
+                            </label>
+                            <input type="number" step="any" class="form-control feature-input" id="feature{{ i }}" name="feature{{ i }}" required aria-label="{{ column_names[i] }}">
+                            <div class="invalid-feedback">Required</div>
+                          </div>
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-lg w-100 mt-3" style="background: linear-gradient(90deg,#e75480,#ffb6c1,#ff7bac); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 8px #e7548030;">Predict <span id="loadingSpinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status" aria-hidden="true"></span></button>
+            </div>
+        </form>
+    </div>
+    <!-- Bootstrap JS for form validation -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        (() => {
+            'use strict';
+            const forms = document.querySelectorAll('.needs-validation');
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+        // Enable Bootstrap tooltips
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        darkModeToggle.addEventListener('click', function() {
+          document.body.classList.toggle('dark-mode');
+          this.querySelector('i').classList.toggle('bi-moon');
+          this.querySelector('i').classList.toggle('bi-brightness-high');
+        });
+
+        // Loading spinner on submit
+        const predictBtn = document.getElementById('predictBtn');
+        const predictBtnText = document.getElementById('predictBtnText');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        document.querySelector('form').addEventListener('submit', function() {
+          predictBtn.disabled = true;
+          loadingSpinner.classList.remove('d-none');
+          predictBtnText.textContent = 'Predicting...';
+        });
+    </script>
+    <!-- Stylish Footer -->
+    <footer class="footer mt-5 py-3" style="background: none; border: none; box-shadow: none;">
+    <div class="container p-0" style="max-width:700px;">
+      <div class="wavy-footer position-relative rounded-4 shadow-lg mx-auto p-4" style="background: linear-gradient(120deg,#ffe4ec 60%,#ffd1dc 100%); overflow:hidden;">
+        <!-- Wavy SVG overlay -->
+        <svg viewBox="0 0 700 50" width="100%" height="50" style="position:absolute;top:-24px;left:0;z-index:0;pointer-events:none;" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 30 Q175 60 350 30 T700 30 V50 H0Z" fill="#ffb6c1" fill-opacity=".4"/>
+        </svg>
+        <div class="d-flex flex-column flex-md-row align-items-center justify-content-center gap-2 position-relative" style="z-index:1;">
+          <span style="color:#e75480; font-weight:500; font-size:1.08rem; display:flex; align-items:center;">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" style="margin-right:6px;" xmlns="http://www.w3.org/2000/svg"><path d="M11 20s-7-4.35-7-10A5 5 0 0 1 11 5a5 5 0 0 1 7 5c0 5.65-7 10-7 10z" fill="#e75480"/></svg>
+            &copy; 2025 Breast Cancer Prediction
+          </span>
+          <span class="mx-2" style="color:#e75480;">|</span>
+          <a href="https://github.com/V09SV/Breast-Cancer-Prediction" target="_blank" style="color:#e75480; font-weight:600; text-decoration:underline;">GitHub</a>
+        </div>
+      </div>
+    </div>
+</footer>
+</body>
+
+</html>
